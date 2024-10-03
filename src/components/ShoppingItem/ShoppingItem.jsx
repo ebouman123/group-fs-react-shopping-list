@@ -1,22 +1,36 @@
-import { useState } from "react";
+import axios from "axios";
 
-export default function ShoppingItem({ item }) {
-  const [purchased, setPurchased] = useState(false);
+export default function ShoppingItem({ item, getShoppingList }) {
 
   const buyItem = () => {
-    setPurchased(true);
+    axios
+      .put(`/api/itemList/${item.id}`)
+      .then((response) => {
+        getShoppingList();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const removeItem = () => {};
-
+  const removeItem = () => {
+    axios
+      .delete(`/api/itemList/${item.id}`)
+      .then((response) => {
+        getShoppingList();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  
   return (
     <>
       <li>
         <p>{item.name}</p>
         <p>{item.quantity}</p>
         <p>{item.unit}</p>
-      </li>
-      {purchased ? (
+        {item.purchased ? (
         <p>Purchased</p>
       ) : (
         <>
@@ -24,6 +38,9 @@ export default function ShoppingItem({ item }) {
           <button onClick={removeItem}>Remove</button>
         </>
       )}
+      </li>
+
     </>
   );
+
 }
