@@ -26,7 +26,7 @@ export default function ShoppingList({ shoppingList, getShoppingList }) {
       data = {
         purchased: items.purchased,
       };
-
+      if (items.purchased){
       axios
         .put(`/api/itemList/${items.id}`, data)
         .then((response) => {
@@ -35,6 +35,7 @@ export default function ShoppingList({ shoppingList, getShoppingList }) {
         .catch((error) => {
           console.error(error);
         });
+      }
     }
   };
 
