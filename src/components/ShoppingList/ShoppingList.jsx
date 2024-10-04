@@ -38,6 +38,19 @@ export default function ShoppingList({ shoppingList, getShoppingList }) {
   const resetItem = () => {
     let data = {};
 
+    Swal.fire({
+      title: "Are you sure you want to Reset?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Reset",
+      denyButtonText: `Don't Reset`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
     for (let i = 0; i < shoppingList.length; i++) {
       const items = shoppingList[i];
 
