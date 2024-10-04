@@ -35,7 +35,7 @@ export default function ShoppingList({ shoppingList, getShoppingList }) {
     });
   };
 
-  const resetItem = () => {
+  const resetItems = () => {
     let data = {};
 
     Swal.fire({
@@ -47,33 +47,34 @@ export default function ShoppingList({ shoppingList, getShoppingList }) {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Saved!", "", "success");
+        for (let i = 0; i < shoppingList.length; i++) {
+          const items = shoppingList[i];
+    
+          data = {
+            purchased: items.purchased,
+          };
+          if (items.purchased) {
+            axios
+              .put(`/api/itemList/${items.id}`, data)
+              .then((response) => {
+                getShoppingList();
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+        }
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
       }
     });
-    for (let i = 0; i < shoppingList.length; i++) {
-      const items = shoppingList[i];
-
-      data = {
-        purchased: items.purchased,
-      };
-      if (items.purchased) {
-        axios
-          .put(`/api/itemList/${items.id}`, data)
-          .then((response) => {
-            getShoppingList();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    }
+    
   };
 
   return (
     <>
       <h2>Shopping List</h2>
-      <button onClick={resetItem}>Reset</button>
+      <button onClick={resetItems}>Reset</button>
       <button onClick={removeAll}>Clear</button>
       <ul>
         {shoppingList.map((item) => {
